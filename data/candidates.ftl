@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Vote for us!</title>
-    <link rel="stylesheet" href="candidates.css">
+    <link rel="stylesheet" href="css/candidates.css">
 </head>
 <body>
 <div class="container flex flex-col align-center">
