@@ -29,10 +29,13 @@
 </head>
 <body>
 <div class="error-container">
+    <img style="display: block; margin: 0 auto;" src="images/anon.jpeg"
+         alt="anon">
 	<h1>🛑 Error!</h1>
 	<p>${error!}</p>
+    <p>Вы попали к Анонимусу</p>
 	<br>
-	<a href="/">Back to Main</a>
+	<a href="/">Back to Vote page</a>
 </div>
 </body>
 </html>
