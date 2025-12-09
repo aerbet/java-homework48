@@ -14,12 +14,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class BasicServer {
-
   private static final Configuration freemarker = initFreeMarker();
-  private Map<String, RouteHandler> routes = new HashMap<>();
+  private final Map<String, RouteHandler> routes = new HashMap<>();
   private final String dataDir = "data";
   private final HttpServer server;
-  private List<Candidate> candidates;
+  private final List<Candidate> candidates;
 
   public BasicServer(String host, int port) throws IOException {
     server = createServer(host, port);
@@ -58,20 +57,18 @@ public class BasicServer {
 
     String id = params.get("candidateId");
 
-    Optional<Candidate> cOpt = candidates.stream()
+    Optional<Candidate> candidatesTier = candidates.stream()
             .filter(c -> c.getId().equals(id))
             .findFirst();
 
-    if (cOpt.isEmpty()) {
-      renderTemplate(exchange, "error.ftl", Map.of("error", "Кандидат не найден"));
+    if (candidatesTier.isEmpty()) {
+      renderError(exchange, "Кандидат с указанным ID не найден!");
       return;
     }
 
-    Candidate c = cOpt.get();
+    Candidate c = candidatesTier.get();
     c.addVote();
     FileUtil.saveCandidates(candidates);
-
-    exchange.getResponseHeaders().add("Set-Cookie", "votedId=" + id + "; Path=/");
 
     redirect(exchange, "/thankyou?id=" + id);
   }
@@ -81,16 +78,16 @@ public class BasicServer {
 
     String id = params.get("id");
 
-    Optional<Candidate> cOpt = candidates.stream()
+    Optional<Candidate> candidatesTier = candidates.stream()
             .filter(c -> c.getId().equals(id))
             .findFirst();
 
-    if (cOpt.isEmpty()) {
-      redirect(exchange, "/");
+    if (candidatesTier.isEmpty()) {
+      renderError(exchange, "Кандидат с указанным ID не найден!");
       return;
     }
 
-    Candidate c = cOpt.get();
+    Candidate c = candidatesTier.get();
     int total = candidates.stream().mapToInt(Candidate::getVotes).sum();
 
     Map<String, Object> data = new HashMap<>();
@@ -118,7 +115,7 @@ public class BasicServer {
   private void renderError(HttpExchange exchange, String errorMessage) {
     Map<String, Object> data = new HashMap<>();
     data.put("error", errorMessage);
-    renderTemplate(exchange, "error.html", data);
+    renderTemplate(exchange, "error.ftl", data);
   }
 
   private void redirect(HttpExchange exchange, String location) {
