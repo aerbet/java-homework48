@@ -12,8 +12,8 @@
 		<div class="card">
 			<div class="flex flex-col align-center">
 				<img src="images/${candidate.photo}">
-				<p>You voted for: <b>${candidate.name}</b></p>
-				<p>Current rating: ${percent}%</p>
+				<p>Thank you for the vote!</p>
+				<p>Now ${candidate.name} has: ${percent}% votes</p>
 			</div>
 		</div>
 		<a class="back flex align-center" href="/">back to main</a>
